@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Search, PhoneIncoming, Play, Download, Filter, X, Calendar as CalendarIcon, ChevronDown } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Calendar } from './ui/calendar';
-import { contacts, callLogs as initialCallLogs, DUMMY_AUDIO_URL } from '../data/mockData';
+import { contacts, callLogs as initialCallLogs, callTranscripts, DUMMY_AUDIO_URL } from '../data/mockData';
 
 const FILTER_OPTIONS = [
   { id: 'all', label: 'All Time' },
@@ -63,12 +63,15 @@ export default function ChatList({ selectedChat, selectedCallLogId, onSelectChat
   const filteredLogs = useMemo(() => {
     let logs = [...initialCallLogs];
 
-    // Search filter
+    // Search filter by name or subject
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       logs = logs.filter((log) => {
         const contact = contacts.find((c) => c.id === log.contactId);
-        return contact?.name.toLowerCase().includes(q);
+        const transcript = callTranscripts[log.id];
+        const nameMatch = contact?.name.toLowerCase().includes(q);
+        const subjectMatch = transcript?.subject?.toLowerCase().includes(q);
+        return nameMatch || subjectMatch;
       });
     }
 
