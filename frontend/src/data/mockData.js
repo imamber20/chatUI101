@@ -391,3 +391,245 @@ export const callLogs = [
   { id: 'cl24', contactId: 'alex', date: daysAgo(28, 11, 45), duration: '13:27', isRead: true },
   { id: 'cl25', contactId: 'sarah', date: daysAgo(30, 9, 0), duration: '07:55', isRead: true },
 ];
+
+
+// Dummy audio URL for call recordings
+export const DUMMY_AUDIO_URL = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+
+// Call transcripts keyed by call log ID
+export const callTranscripts = {
+  cl1: {
+    subject: 'Quarterly Report Review & Deadline',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Hi Kiki, I need to discuss the quarterly report.', time: '09:15' },
+      { id: 2, sender: 'kiki', text: 'Of course, Sarah! What specifically would you like to go over?', time: '09:15' },
+      { id: 3, sender: 'caller', text: 'The revenue numbers for Q3 seem off. Can you pull up the comparison data?', time: '09:16' },
+      { id: 4, sender: 'kiki', text: 'I see the discrepancy. It looks like the European market figures weren\'t included in the initial draft.', time: '09:17' },
+      { id: 5, sender: 'caller', text: 'That explains it. Can you update the report and send it before the 2 PM meeting?', time: '09:18' },
+      { id: 6, sender: 'kiki', text: 'Absolutely. I\'ll have the corrected version with all regional data ready by noon.', time: '09:19' },
+    ],
+  },
+  cl2: {
+    subject: 'Sprint Planning & Backend Integration',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, we need to finalize the sprint backlog for next week.', time: '08:42' },
+      { id: 2, sender: 'kiki', text: 'Sure James. I\'ve drafted the priority items. Want me to walk through them?', time: '08:43' },
+      { id: 3, sender: 'caller', text: 'Yes please. Also, the backend team flagged some API issues.', time: '08:44' },
+      { id: 4, sender: 'kiki', text: 'I noticed that too. The authentication endpoint needs refactoring. I\'d suggest we allocate 3 story points for it.', time: '08:45' },
+      { id: 5, sender: 'caller', text: 'Agreed. Let\'s also add the database migration task.', time: '08:46' },
+    ],
+  },
+  cl3: {
+    subject: 'Dashboard UI Redesign Feedback',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, I\'ve updated the dashboard wireframes based on yesterday\'s feedback.', time: '07:30' },
+      { id: 2, sender: 'kiki', text: 'Great Elena! I\'ll review them right away. Any specific areas you want me to focus on?', time: '07:31' },
+      { id: 3, sender: 'caller', text: 'The navigation flow and the color accessibility compliance.', time: '07:32' },
+      { id: 4, sender: 'kiki', text: 'The navigation looks much smoother now. I\'d suggest increasing the contrast ratio on the secondary buttons though.', time: '07:33' },
+    ],
+  },
+  cl4: {
+    subject: 'Q4 Budget Allocation & Engineering Costs',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, I have the updated Q4 budget figures. Can we review them?', time: '16:20' },
+      { id: 2, sender: 'kiki', text: 'Of course, Michael. I\'ve been expecting these. What\'s the total allocation?', time: '16:21' },
+      { id: 3, sender: 'caller', text: 'We\'ve got 15% more for engineering but marketing took a slight cut.', time: '16:22' },
+      { id: 4, sender: 'kiki', text: 'The engineering increase makes sense given our infrastructure plans. How much was the marketing reduction?', time: '16:23' },
+      { id: 5, sender: 'caller', text: 'About 8%. We\'ll need to optimize our ad spend accordingly.', time: '16:24' },
+      { id: 6, sender: 'kiki', text: 'I can prepare an optimized marketing budget proposal that prioritizes high-ROI channels.', time: '16:25' },
+    ],
+  },
+  cl5: {
+    subject: 'New Hire Orientation Schedule',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Quick update on the new hire starting Monday.', time: '14:05' },
+      { id: 2, sender: 'kiki', text: 'Hi Priya! Is everything set for the orientation?', time: '14:05' },
+      { id: 3, sender: 'caller', text: 'Almost. I need to reschedule the meeting to 3 PM. Can you update the calendar?', time: '14:06' },
+    ],
+  },
+  cl6: {
+    subject: 'Social Media Campaign Performance Analysis',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, the campaign numbers are in and they look amazing!', time: '11:15' },
+      { id: 2, sender: 'kiki', text: 'That\'s exciting, Jenny! Which platforms performed best?', time: '11:16' },
+      { id: 3, sender: 'caller', text: 'LinkedIn had a 45% engagement increase. Instagram was up 30%.', time: '11:17' },
+      { id: 4, sender: 'kiki', text: 'Those are exceptional numbers! The targeted content strategy is clearly working.', time: '11:18' },
+      { id: 5, sender: 'caller', text: 'Can you compile a detailed report? I want to present this to the board next week.', time: '11:19' },
+      { id: 6, sender: 'kiki', text: 'I\'ll have a comprehensive deck ready with ROI analysis and recommendations for scaling.', time: '11:20' },
+    ],
+  },
+  cl7: {
+    subject: 'Client Proposal Follow-up & Next Steps',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Good news, Kiki! The client signed off on the proposal.', time: '15:00' },
+      { id: 2, sender: 'kiki', text: 'Fantastic, David! When do they want to kick things off?', time: '15:01' },
+      { id: 3, sender: 'caller', text: 'Next quarter. They want a detailed implementation timeline.', time: '15:02' },
+      { id: 4, sender: 'kiki', text: 'I\'ll draft a phased rollout plan with milestones and deliverables.', time: '15:03' },
+      { id: 5, sender: 'caller', text: 'Perfect. Also need to set up a joint kickoff meeting with their technical team.', time: '15:04' },
+    ],
+  },
+  cl8: {
+    subject: 'Server Migration Quick Check',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Hey Kiki, just a quick ping. Is the migration verified?', time: '10:30' },
+      { id: 2, sender: 'kiki', text: 'Yes Alex, all systems are green. Zero downtime achieved!', time: '10:30' },
+    ],
+  },
+  cl9: {
+    subject: 'Stakeholder Presentation Prep',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, I need help preparing for the stakeholder presentation.', time: '13:45' },
+      { id: 2, sender: 'kiki', text: 'Sure Sarah! What\'s the focus this time?', time: '13:46' },
+      { id: 3, sender: 'caller', text: 'Product roadmap and customer retention metrics.', time: '13:47' },
+      { id: 4, sender: 'kiki', text: 'I\'ll pull together the retention data and roadmap visuals. When\'s the presentation?', time: '13:48' },
+    ],
+  },
+  cl10: {
+    subject: 'Code Review & Deployment Pipeline',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, the code review for the payment module is pending.', time: '09:00' },
+      { id: 2, sender: 'kiki', text: 'I\'ll prioritize it, James. Any specific concerns?', time: '09:01' },
+      { id: 3, sender: 'caller', text: 'Security validation on the checkout flow needs extra scrutiny.', time: '09:02' },
+      { id: 4, sender: 'kiki', text: 'Understood. I\'ll do a thorough security audit and check for edge cases.', time: '09:03' },
+      { id: 5, sender: 'caller', text: 'Also, can we set up automated testing for the deployment pipeline?', time: '09:04' },
+    ],
+  },
+  cl11: {
+    subject: 'Mobile App Design System Update',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, I want to standardize our mobile design system.', time: '17:30' },
+      { id: 2, sender: 'kiki', text: 'Great initiative, Elena! Are we looking at component-level consistency?', time: '17:31' },
+      { id: 3, sender: 'caller', text: 'Yes, typography, spacing, and color tokens need to be unified.', time: '17:32' },
+      { id: 4, sender: 'kiki', text: 'I\'ll create a design token library that maps to our existing web system.', time: '17:33' },
+    ],
+  },
+  cl12: {
+    subject: 'Annual Budget Planning Kickoff',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, it\'s time to start the annual budget planning process.', time: '12:15' },
+      { id: 2, sender: 'kiki', text: 'Ready to go, Michael. I\'ve gathered last year\'s actuals for comparison.', time: '12:16' },
+      { id: 3, sender: 'caller', text: 'Good. We need to account for the new product launch costs.', time: '12:17' },
+    ],
+  },
+  cl13: {
+    subject: 'Employee Benefits Program Review',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, we need to review the employee benefits package for renewal.', time: '08:45' },
+      { id: 2, sender: 'kiki', text: 'I\'ve compiled the utilization data from last year, Priya.', time: '08:46' },
+      { id: 3, sender: 'caller', text: 'What\'s the overall satisfaction score?', time: '08:47' },
+      { id: 4, sender: 'kiki', text: '87% overall, with dental and wellness programs being the most valued.', time: '08:48' },
+    ],
+  },
+  cl14: {
+    subject: 'Content Calendar Q2 Planning',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Let\'s plan the Q2 content calendar, Kiki.', time: '16:00' },
+      { id: 2, sender: 'kiki', text: 'I\'ve drafted a preliminary schedule. Should we focus on product launches or thought leadership?', time: '16:01' },
+      { id: 3, sender: 'caller', text: 'A mix of both. 60% product, 40% thought leadership.', time: '16:02' },
+      { id: 4, sender: 'kiki', text: 'Perfect balance. I\'ll map out the themes and assign deadlines.', time: '16:03' },
+      { id: 5, sender: 'caller', text: 'Great, and include the trade show promotion in March.', time: '16:04' },
+    ],
+  },
+  cl15: {
+    subject: 'Enterprise Deal Negotiation Update',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, the enterprise client wants to renegotiate terms.', time: '11:00' },
+      { id: 2, sender: 'kiki', text: 'What are their main concerns, David?', time: '11:01' },
+      { id: 3, sender: 'caller', text: 'Pricing tier and SLA guarantees.', time: '11:02' },
+    ],
+  },
+  cl16: {
+    subject: 'Infrastructure Scaling Plan',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, we need to plan for the traffic spike next month.', time: '14:30' },
+      { id: 2, sender: 'kiki', text: 'I\'ve been monitoring the trends, Alex. We should autoscale the compute instances.', time: '14:31' },
+      { id: 3, sender: 'caller', text: 'Agreed. Also need to upgrade the CDN capacity.', time: '14:32' },
+      { id: 4, sender: 'kiki', text: 'I\'ll prepare a scaling blueprint with cost projections.', time: '14:33' },
+    ],
+  },
+  cl17: {
+    subject: 'Product Roadmap Strategy Session',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, let\'s review the product roadmap for the next two quarters.', time: '10:00' },
+      { id: 2, sender: 'kiki', text: 'I\'ve prepared a priority matrix based on customer feedback and market analysis.', time: '10:01' },
+      { id: 3, sender: 'caller', text: 'What are the top three requested features?', time: '10:02' },
+      { id: 4, sender: 'kiki', text: 'Advanced analytics dashboard, API integrations marketplace, and real-time collaboration tools.', time: '10:03' },
+      { id: 5, sender: 'caller', text: 'Let\'s fast-track the analytics dashboard. It aligns with our enterprise push.', time: '10:04' },
+    ],
+  },
+  cl18: {
+    subject: 'CI/CD Pipeline Optimization',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, our build times have increased significantly.', time: '09:15' },
+      { id: 2, sender: 'kiki', text: 'I noticed that too, James. The test suite seems to be the bottleneck.', time: '09:16' },
+      { id: 3, sender: 'caller', text: 'Can we parallelize the tests?', time: '09:17' },
+    ],
+  },
+  cl19: {
+    subject: 'Design System Color Accessibility Audit',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, we need an accessibility audit on our color palette.', time: '13:00' },
+      { id: 2, sender: 'kiki', text: 'I\'ll run a WCAG AA compliance check on all our UI components, Elena.', time: '13:01' },
+      { id: 3, sender: 'caller', text: 'Focus on the form elements and call-to-action buttons first.', time: '13:02' },
+    ],
+  },
+  cl20: {
+    subject: 'Vendor Contract Renewal Discussion',
+    messages: [
+      { id: 1, sender: 'caller', text: 'The cloud vendor contract is up for renewal next month, Kiki.', time: '15:45' },
+      { id: 2, sender: 'kiki', text: 'I\'ve compared pricing from three major providers, Michael.', time: '15:46' },
+      { id: 3, sender: 'caller', text: 'What\'s the most cost-effective option?', time: '15:47' },
+      { id: 4, sender: 'kiki', text: 'Staying with the current provider with a 3-year commitment saves us 22%.', time: '15:48' },
+    ],
+  },
+  cl21: {
+    subject: 'Team Training Program Setup',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, we need to set up a training program for the new tools.', time: '10:30' },
+      { id: 2, sender: 'kiki', text: 'I can design a 4-week curriculum, Priya. What tools are we covering?', time: '10:31' },
+      { id: 3, sender: 'caller', text: 'The new project management suite and the updated CRM.', time: '10:32' },
+    ],
+  },
+  cl22: {
+    subject: 'Brand Refresh Campaign Brief',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, let\'s discuss the brand refresh campaign.', time: '08:00' },
+      { id: 2, sender: 'kiki', text: 'I\'ve outlined three creative directions, Jenny. Want to review them?', time: '08:01' },
+      { id: 3, sender: 'caller', text: 'Yes, let\'s go with the modern minimalist approach.', time: '08:02' },
+    ],
+  },
+  cl23: {
+    subject: 'Partnership Pipeline Review',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, how\'s the partnership pipeline looking?', time: '16:15' },
+      { id: 2, sender: 'kiki', text: 'We have 5 active leads and 2 near close, David.', time: '16:16' },
+      { id: 3, sender: 'caller', text: 'Excellent. Which ones are closest to signing?', time: '16:17' },
+      { id: 4, sender: 'kiki', text: 'TechVentures and GlobalSync. Both expected to close this week.', time: '16:18' },
+    ],
+  },
+  cl24: {
+    subject: 'Security Incident Response Drill',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, we need to schedule the quarterly security drill.', time: '11:45' },
+      { id: 2, sender: 'kiki', text: 'I\'ll coordinate with the security team, Alex. What scenario this time?', time: '11:46' },
+      { id: 3, sender: 'caller', text: 'Simulated ransomware attack with full incident response.', time: '11:47' },
+    ],
+  },
+  cl25: {
+    subject: 'Customer Success Metrics Deep Dive',
+    messages: [
+      { id: 1, sender: 'caller', text: 'Kiki, let\'s do a deep dive into customer success metrics.', time: '09:00' },
+      { id: 2, sender: 'kiki', text: 'I\'ve prepared the NPS trends, churn analysis, and expansion revenue data, Sarah.', time: '09:01' },
+      { id: 3, sender: 'caller', text: 'What\'s our current NPS score?', time: '09:02' },
+      { id: 4, sender: 'kiki', text: '72, which is up from 65 last quarter. The onboarding improvements made a significant impact.', time: '09:03' },
+    ],
+  },
+};
+
+// Static waveform data (deterministic heights for the audio player)
+export const waveformData = [
+  12, 18, 25, 30, 22, 35, 28, 40, 32, 18, 25, 38, 42, 30, 20, 35, 28, 45, 38, 22,
+  15, 30, 42, 35, 28, 20, 38, 32, 45, 40, 25, 18, 35, 42, 30, 22, 38, 28, 15, 40,
+  35, 22, 30, 45, 38, 25, 42, 20, 32, 35, 18, 40, 28, 38, 22, 45, 30, 35, 25, 42,
+  20, 38, 32, 28, 45, 35, 22, 40, 30, 18, 42, 25, 35, 38, 28, 20, 45, 32, 22, 40,
+];

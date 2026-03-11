@@ -1,59 +1,219 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Search, Phone, Monitor, MoreVertical, Paperclip, Mic, Send, Play, Eye, Smile } from 'lucide-react';
-import { contacts, messages as allMessages } from '../data/mockData';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Search, Phone, Monitor, MoreVertical, Play, Pause, Heart, SkipBack, SkipForward, PhoneIncoming, Bot } from 'lucide-react';
+import { contacts, callLogs, callTranscripts, waveformData, DUMMY_AUDIO_URL } from '../data/mockData';
 
-export default function ChatArea({ selectedChat, onToggleDetails, showDetails }) {
-  const [inputText, setInputText] = useState('');
-  const [chatMessages, setChatMessages] = useState({});
-  const messagesEndRef = useRef(null);
+function formatTime(seconds) {
+  if (isNaN(seconds)) return '00:00';
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+}
+
+function formatCallDateFull(isoStr) {
+  const d = new Date(isoStr);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+}
+
+// Audio Player Component
+function AudioPlayer({ audioUrl }) {
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [playbackRate, setPlaybackRate] = useState(1);
+  const [isFavorited, setIsFavorited] = useState(false);
+  const animFrameRef = useRef(null);
 
   useEffect(() => {
-    setChatMessages({ ...allMessages });
-  }, []);
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.src = audioUrl;
+    audio.playbackRate = playbackRate;
+    setIsPlaying(false);
+    setCurrentTime(0);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [selectedChat, chatMessages]);
-
-  const contact = contacts.find((c) => c.id === selectedChat);
-  const currentMessages = chatMessages[selectedChat] || [];
-
-  const handleSend = () => {
-    if (!inputText.trim()) return;
-    const newMsg = {
-      id: Date.now(),
-      sender: 'me',
-      text: inputText.trim(),
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      type: 'text',
+    const onLoaded = () => setDuration(audio.duration);
+    const onEnded = () => setIsPlaying(false);
+    audio.addEventListener('loadedmetadata', onLoaded);
+    audio.addEventListener('ended', onEnded);
+    return () => {
+      audio.removeEventListener('loadedmetadata', onLoaded);
+      audio.removeEventListener('ended', onEnded);
+      audio.pause();
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     };
-    setChatMessages((prev) => ({
-      ...prev,
-      [selectedChat]: [...(prev[selectedChat] || []), newMsg],
-    }));
-    setInputText('');
+  }, [audioUrl, playbackRate]);
+
+  const updateTime = useCallback(() => {
+    if (audioRef.current) {
+      setCurrentTime(audioRef.current.currentTime);
+    }
+    if (isPlaying) {
+      animFrameRef.current = requestAnimationFrame(updateTime);
+    }
+  }, [isPlaying]);
+
+  useEffect(() => {
+    if (isPlaying) {
+      animFrameRef.current = requestAnimationFrame(updateTime);
+    } else if (animFrameRef.current) {
+      cancelAnimationFrame(animFrameRef.current);
+    }
+    return () => { if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current); };
+  }, [isPlaying, updateTime]);
+
+  const togglePlay = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (isPlaying) { audio.pause(); setIsPlaying(false); }
+    else { audio.play().then(() => setIsPlaying(true)).catch(() => {}); }
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
+  const skip = (sec) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.currentTime = Math.max(0, Math.min(audio.duration, audio.currentTime + sec));
+    setCurrentTime(audio.currentTime);
+  };
+
+  const cycleSpeed = () => {
+    const speeds = [1, 1.25, 1.5, 2, 0.75];
+    const idx = speeds.indexOf(playbackRate);
+    const next = speeds[(idx + 1) % speeds.length];
+    setPlaybackRate(next);
+    if (audioRef.current) audioRef.current.playbackRate = next;
+  };
+
+  const seekToPosition = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const pct = x / rect.width;
+    const audio = audioRef.current;
+    if (audio && duration) {
+      audio.currentTime = pct * duration;
+      setCurrentTime(audio.currentTime);
     }
   };
 
-  if (!contact) {
+  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+  const progressBarIdx = Math.floor((progress / 100) * waveformData.length);
+
+  return (
+    <div className="border-t-2 border-emerald-400 bg-gradient-to-b from-green-50 to-emerald-50">
+      <audio ref={audioRef} preload="metadata" />
+
+      {/* Waveform */}
+      <div
+        className="px-6 pt-4 pb-1 cursor-pointer"
+        onClick={seekToPosition}
+      >
+        <div className="flex items-end justify-center gap-[2px] h-12">
+          {waveformData.map((h, i) => (
+            <div
+              key={i}
+              className={`w-[3px] rounded-full transition-colors duration-75 ${
+                i <= progressBarIdx ? 'bg-emerald-500' : 'bg-green-200'
+              }`}
+              style={{ height: `${h}px` }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Time display */}
+      <div className="flex justify-between px-6 pb-2">
+        <span className={`text-xs font-mono tabular-nums ${isPlaying ? 'text-emerald-600' : 'text-gray-500'}`}>
+          {formatTime(currentTime)}
+        </span>
+        <span className="text-xs font-mono tabular-nums text-gray-400">
+          {formatTime(duration)}
+        </span>
+      </div>
+
+      {/* Controls */}
+      <div className="flex items-center justify-center gap-5 pb-4 px-6">
+        {/* Speed */}
+        <button
+          onClick={cycleSpeed}
+          className="w-9 h-9 flex items-center justify-center text-gray-500 hover:text-emerald-700 transition-colors"
+          title={`Speed: ${playbackRate}x`}
+        >
+          <span className="text-[11px] font-bold">{playbackRate}x</span>
+        </button>
+
+        {/* Rewind 10s */}
+        <button
+          onClick={() => skip(-10)}
+          className="w-9 h-9 flex items-center justify-center text-gray-500 hover:text-emerald-700 transition-colors relative"
+          title="Rewind 10s"
+        >
+          <SkipBack size={20} />
+          <span className="absolute -bottom-0.5 text-[8px] font-bold text-gray-400">10</span>
+        </button>
+
+        {/* Play / Pause */}
+        <button
+          onClick={togglePlay}
+          className="w-14 h-14 rounded-full bg-emerald-800 text-white flex items-center justify-center hover:bg-emerald-900 transition-colors shadow-lg shadow-emerald-800/30"
+        >
+          {isPlaying ? <Pause size={24} fill="white" /> : <Play size={24} fill="white" className="ml-1" />}
+        </button>
+
+        {/* Forward 10s */}
+        <button
+          onClick={() => skip(10)}
+          className="w-9 h-9 flex items-center justify-center text-gray-500 hover:text-emerald-700 transition-colors relative"
+          title="Forward 10s"
+        >
+          <SkipForward size={20} />
+          <span className="absolute -bottom-0.5 text-[8px] font-bold text-gray-400">10</span>
+        </button>
+
+        {/* Favorite */}
+        <button
+          onClick={() => setIsFavorited(!isFavorited)}
+          className={`w-9 h-9 flex items-center justify-center transition-colors ${
+            isFavorited ? 'text-red-500' : 'text-gray-400 hover:text-red-400'
+          }`}
+          title="Favorite"
+        >
+          <Heart size={20} fill={isFavorited ? 'currentColor' : 'none'} />
+        </button>
+      </div>
+
+      {/* Bottom accent */}
+      <div className="h-1 bg-gradient-to-r from-emerald-400 via-green-500 to-teal-400" />
+    </div>
+  );
+}
+
+// Main ChatArea (Transcript View)
+export default function ChatArea({ selectedChat, selectedCallLogId, onToggleDetails, showDetails }) {
+  const messagesEndRef = useRef(null);
+
+  const contact = contacts.find((c) => c.id === selectedChat);
+  const callLog = callLogs.find((cl) => cl.id === selectedCallLogId);
+  const transcript = callTranscripts[selectedCallLogId];
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [selectedCallLogId]);
+
+  if (!contact || !callLog) {
     return (
       <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-green-50 to-white">
         <div className="text-center">
           <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-            <Search size={32} className="text-emerald-400" />
+            <PhoneIncoming size={32} className="text-emerald-400" />
           </div>
-          <p className="text-gray-500 text-lg">Select a chat to start messaging</p>
-          <p className="text-gray-400 text-sm mt-1">Choose from your contacts on the left</p>
+          <p className="text-gray-500 text-lg">Select a call log to view transcript</p>
+          <p className="text-gray-400 text-sm mt-1">Choose from the call logs on the left</p>
         </div>
       </div>
     );
   }
+
+  const currentMessages = transcript?.messages || [];
 
   return (
     <div className="flex-1 flex flex-col h-full bg-gradient-to-br from-green-50/50 to-white">
@@ -62,14 +222,11 @@ export default function ChatArea({ selectedChat, onToggleDetails, showDetails })
         <div className="flex items-center gap-3">
           <div className="relative">
             <img src={contact.avatar} alt={contact.name} className="w-10 h-10 rounded-full object-cover" />
-            {contact.online && (
-              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full" />
-            )}
           </div>
           <div>
             <h2 className="text-sm font-semibold text-gray-800">{contact.name}</h2>
             <p className="text-xs text-gray-400">
-              {contact.online ? 'Online' : 'Last seen recently'}
+              Call transcript · {callLog.duration} · {formatCallDateFull(callLog.date)}
             </p>
           </div>
         </div>
@@ -92,73 +249,53 @@ export default function ChatArea({ selectedChat, onToggleDetails, showDetails })
         </div>
       </div>
 
-      {/* Messages */}
+      {/* Subject Banner */}
+      {transcript?.subject && (
+        <div className="px-5 py-2.5 bg-gradient-to-r from-emerald-50 to-green-50 border-b border-green-100/80">
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-5 rounded-full bg-emerald-500" />
+            <span className="text-xs font-semibold text-emerald-800">{transcript.subject}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Transcript Messages */}
       <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
         {currentMessages.map((msg) => {
-          const isMe = msg.sender === 'me';
-          const senderContact = !isMe ? contacts.find((c) => c.id === msg.sender) : null;
+          const isCaller = msg.sender === 'caller';
 
           return (
-            <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'} gap-2`}>
-              {!isMe && senderContact && (
-                <img src={senderContact.avatar} alt="" className="w-8 h-8 rounded-full object-cover self-end flex-shrink-0" />
+            <div key={msg.id} className={`flex ${isCaller ? 'justify-start' : 'justify-end'} gap-2`}>
+              {/* Caller avatar */}
+              {isCaller && (
+                <img src={contact.avatar} alt="" className="w-8 h-8 rounded-full object-cover self-end flex-shrink-0" />
               )}
-              <div className={`max-w-[65%] ${isMe ? 'order-first' : ''}`}>
-                {!isMe && senderContact && (
-                  <p className="text-xs font-medium text-emerald-700 mb-1 ml-1">{senderContact.name}</p>
+
+              <div className="max-w-[65%]">
+                {isCaller && (
+                  <p className="text-xs font-medium text-emerald-700 mb-1 ml-1">{contact.name}</p>
                 )}
-                {msg.type === 'image' ? (
-                  <div className={`rounded-2xl overflow-hidden shadow-sm ${isMe ? 'rounded-br-md' : 'rounded-bl-md'}`}>
-                    <img src={msg.image} alt="" className="w-full max-w-[320px] object-cover" />
-                    {msg.caption && (
-                      <div className={`px-3 py-2 text-xs ${isMe ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700 border border-green-100'}`}>
-                        {msg.caption}
-                      </div>
-                    )}
-                    <div className={`flex items-center justify-end gap-1 px-3 py-1 text-[10px] ${isMe ? 'bg-emerald-600 text-emerald-200' : 'bg-white text-gray-400 border-x border-b border-green-100'}`}>
-                      <Eye size={10} />
-                      <span>3</span>
-                      <span className="ml-1">{msg.time}</span>
-                    </div>
-                  </div>
-                ) : msg.type === 'audio' ? (
-                  <div className={`rounded-2xl px-4 py-3 shadow-sm ${isMe ? 'bg-emerald-600 text-white rounded-br-md' : 'bg-white border border-green-100 text-gray-700 rounded-bl-md'}`}>
-                    <div className="flex items-center gap-3">
-                      <button className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${isMe ? 'bg-emerald-700' : 'bg-emerald-100'}`}>
-                        <Play size={14} className={isMe ? 'text-white' : 'text-emerald-700'} fill="currentColor" />
-                      </button>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-1">
-                          {[...Array(20)].map((_, i) => (
-                            <div key={i} className={`w-1 rounded-full ${isMe ? 'bg-emerald-300' : 'bg-emerald-300'}`} style={{ height: `${Math.random() * 16 + 4}px` }} />
-                          ))}
-                        </div>
-                        <div className={`flex items-center gap-2 mt-1 text-[10px] ${isMe ? 'text-emerald-200' : 'text-gray-400'}`}>
-                          <span>{msg.duration}</span>
-                          <span>{msg.size}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className={`flex items-center justify-end gap-1 mt-1 text-[10px] ${isMe ? 'text-emerald-200' : 'text-gray-400'}`}>
-                      <Eye size={10} />
-                      <span>3</span>
-                      <span className="ml-1">{msg.time}</span>
-                    </div>
-                  </div>
-                ) : (
-                  <div className={`rounded-2xl px-4 py-2.5 shadow-sm ${isMe ? 'bg-emerald-600 text-white rounded-br-md' : 'bg-white border border-green-100 text-gray-700 rounded-bl-md'}`}>
-                    <p className="text-sm leading-relaxed">{msg.text}</p>
-                    <div className={`flex items-center justify-end gap-1 mt-1 text-[10px] ${isMe ? 'text-emerald-200' : 'text-gray-400'}`}>
-                      <Eye size={10} />
-                      <span>3</span>
-                      <span className="ml-1">{msg.time}</span>
-                    </div>
-                  </div>
+                {!isCaller && (
+                  <p className="text-xs font-medium text-emerald-600 mb-1 mr-1 text-right">Kiki</p>
                 )}
+                <div className={`rounded-2xl px-4 py-2.5 shadow-sm ${
+                  isCaller
+                    ? 'bg-white border border-green-100 text-gray-700 rounded-bl-md'
+                    : 'bg-emerald-600 text-white rounded-br-md'
+                }`}>
+                  <p className="text-sm leading-relaxed">{msg.text}</p>
+                  <div className={`flex items-center justify-end gap-1 mt-1 text-[10px] ${
+                    isCaller ? 'text-gray-400' : 'text-emerald-200'
+                  }`}>
+                    <span>{msg.time}</span>
+                  </div>
+                </div>
               </div>
-              {isMe && (
+
+              {/* Kiki avatar */}
+              {!isCaller && (
                 <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center self-end flex-shrink-0">
-                  <span className="text-xs font-semibold text-emerald-700">You</span>
+                  <Bot size={16} className="text-emerald-700" />
                 </div>
               )}
             </div>
@@ -167,34 +304,8 @@ export default function ChatArea({ selectedChat, onToggleDetails, showDetails })
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
-      <div className="px-5 py-3 border-t border-green-100 bg-white/80 backdrop-blur-sm">
-        <div className="flex items-center gap-2">
-          <button className="p-2 rounded-lg hover:bg-green-50 text-gray-400 transition-colors">
-            <Smile size={20} />
-          </button>
-          <button className="p-2 rounded-lg hover:bg-green-50 text-gray-400 transition-colors">
-            <Paperclip size={20} />
-          </button>
-          <input
-            type="text"
-            placeholder="Your message"
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            onKeyDown={handleKeyDown}
-            className="flex-1 px-4 py-2.5 bg-green-50 border border-green-100 rounded-xl text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/40 focus:border-emerald-300 transition-all"
-          />
-          {inputText.trim() ? (
-            <button onClick={handleSend} className="p-2.5 rounded-xl bg-emerald-500 text-white hover:bg-emerald-600 transition-colors shadow-sm">
-              <Send size={18} />
-            </button>
-          ) : (
-            <button className="p-2 rounded-lg hover:bg-green-50 text-gray-400 transition-colors">
-              <Mic size={20} />
-            </button>
-          )}
-        </div>
-      </div>
+      {/* Audio Player instead of message input */}
+      <AudioPlayer audioUrl={DUMMY_AUDIO_URL} />
     </div>
   );
 }

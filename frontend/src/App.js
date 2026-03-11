@@ -9,8 +9,14 @@ import ChatDetails from "./components/ChatDetails";
 function App() {
   const [activeNav, setActiveNav] = useState("chats");
   const [selectedChat, setSelectedChat] = useState("sarah");
+  const [selectedCallLogId, setSelectedCallLogId] = useState("cl1");
   const [showDetails, setShowDetails] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSelectCallLog = (contactId, callLogId) => {
+    setSelectedChat(contactId);
+    setSelectedCallLogId(callLogId);
+  };
 
   return (
     <div className="App">
@@ -18,17 +24,19 @@ function App() {
         {/* Left Sidebar */}
         <Sidebar activeNav={activeNav} onNavChange={setActiveNav} />
 
-        {/* Chat List */}
+        {/* Call Logs */}
         <ChatList
           selectedChat={selectedChat}
-          onSelectChat={setSelectedChat}
+          selectedCallLogId={selectedCallLogId}
+          onSelectChat={handleSelectCallLog}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
         />
 
-        {/* Main Chat Area */}
+        {/* Transcript Area */}
         <ChatArea
           selectedChat={selectedChat}
+          selectedCallLogId={selectedCallLogId}
           onToggleDetails={() => setShowDetails(!showDetails)}
           showDetails={showDetails}
         />

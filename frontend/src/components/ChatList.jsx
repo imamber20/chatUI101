@@ -40,7 +40,7 @@ function isInRange(isoStr, from, to) {
   return callDate >= start && callDate <= end;
 }
 
-export default function ChatList({ selectedChat, onSelectChat, searchQuery, onSearchChange }) {
+export default function ChatList({ selectedChat, selectedCallLogId, onSelectChat, searchQuery, onSearchChange }) {
   const [readLogs, setReadLogs] = useState(() => {
     const read = {};
     initialCallLogs.forEach((log) => {
@@ -57,7 +57,7 @@ export default function ChatList({ selectedChat, onSelectChat, searchQuery, onSe
 
   const handleLogClick = (log) => {
     setReadLogs((prev) => ({ ...prev, [log.id]: true }));
-    onSelectChat(log.contactId);
+    onSelectChat(log.contactId, log.id);
   };
 
   const filteredLogs = useMemo(() => {
@@ -215,7 +215,7 @@ export default function ChatList({ selectedChat, onSelectChat, searchQuery, onSe
           const contact = contacts.find((c) => c.id === log.contactId);
           if (!contact) return null;
           const isRead = readLogs[log.id];
-          const isSelected = selectedChat === log.contactId;
+          const isSelected = selectedCallLogId === log.id;
 
           return (
             <button
