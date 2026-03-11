@@ -1,21 +1,21 @@
 import React from 'react';
 import {
-  MessageCircle,
-  Briefcase,
-  Video,
+  Bot,
+  Users,
+  LayoutDashboard,
   Calendar,
-  Star,
-  Bookmark,
+  BarChart3,
+  CreditCard,
   Settings } from
 'lucide-react';
 
 const navItems = [
-{ id: 'chats', icon: MessageCircle, label: "AI Centre", badge: 10 },
-{ id: 'work', icon: Briefcase, label: "Employees" },
-{ id: 'meet', icon: Video, label: "Dashboard" },
+{ id: 'chats', icon: Bot, label: "AI Centre", badge: 10 },
+{ id: 'work', icon: Users, label: "Employees" },
+{ id: 'meet', icon: LayoutDashboard, label: "Dashboard" },
 { id: 'calendar', icon: Calendar, label: 'Calendar' },
-{ id: 'rating', icon: Star, label: "Analysis" },
-{ id: 'saved', icon: Bookmark, label: "Subscription" }];
+{ id: 'rating', icon: BarChart3, label: "Analysis" },
+{ id: 'saved', icon: CreditCard, label: "Subscription" }];
 
 
 export default function Sidebar({ activeNav, onNavChange }) {
@@ -66,7 +66,7 @@ export default function Sidebar({ activeNav, onNavChange }) {
           }>
 
           <Settings size={22} strokeWidth={1.8} />
-          <span className="text-[10px] mt-0.5 leading-tight">All chats</span>
+          <span className="text-[10px] mt-0.5 leading-tight">Settings</span>
         </button>
       </div>
     </div>);
