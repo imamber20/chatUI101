@@ -45,6 +45,7 @@ function App() {
         {showDetails && selectedChat && (
           <ChatDetails
             selectedChat={selectedChat}
+            selectedCallLogId={selectedCallLogId}
             onClose={() => setShowDetails(false)}
           />
         )}

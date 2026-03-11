@@ -633,3 +633,66 @@ export const waveformData = [
   35, 22, 30, 45, 38, 25, 42, 20, 32, 35, 18, 40, 28, 38, 22, 45, 30, 35, 25, 42,
   20, 38, 32, 28, 45, 35, 22, 40, 30, 18, 42, 25, 35, 38, 28, 20, 45, 32, 22, 40,
 ];
+
+
+// Customer contact details
+export const customerDetails = {
+  sarah: {
+    email: 'sarah.mitchell@techco.com',
+    phone: '+1 (415) 555-0128',
+    address: '742 Innovation Blvd, San Francisco, CA 94107',
+    customerSince: 'March 2023',
+  },
+  james: {
+    email: 'james.parker@devstudio.io',
+    phone: '+1 (212) 555-0193',
+    address: '88 Code Street, New York, NY 10013',
+    customerSince: 'January 2023',
+  },
+  elena: {
+    email: 'elena.rodriguez@designhub.co',
+    phone: '+1 (310) 555-0247',
+    address: '156 Creative Ave, Los Angeles, CA 90028',
+    customerSince: 'June 2023',
+  },
+  michael: {
+    email: 'michael.chen@fingroup.com',
+    phone: '+1 (312) 555-0176',
+    address: '320 Finance Row, Chicago, IL 60601',
+    customerSince: 'November 2022',
+  },
+  priya: {
+    email: 'priya.sharma@hrconnect.org',
+    phone: '+1 (617) 555-0312',
+    address: '45 People Place, Boston, MA 02116',
+    customerSince: 'August 2023',
+  },
+  david: {
+    email: 'david.thompson@salesforce.net',
+    phone: '+1 (206) 555-0289',
+    address: '910 Commerce Dr, Seattle, WA 98101',
+    customerSince: 'April 2022',
+  },
+  jenny: {
+    email: 'jenny.li@marketpro.com',
+    phone: '+1 (512) 555-0145',
+    address: '267 Growth Lane, Austin, TX 78701',
+    customerSince: 'September 2023',
+  },
+  alex: {
+    email: 'alex.morgan@cloudops.dev',
+    phone: '+1 (303) 555-0201',
+    address: '55 Server Street, Denver, CO 80202',
+    customerSince: 'February 2023',
+  },
+};
+
+// Employees for ticket assignment
+export const employees = [
+  { id: 'emp1', name: 'Rachel Green', role: 'Customer Support Lead', department: 'Support' },
+  { id: 'emp2', name: 'Tom Bradley', role: 'Technical Support', department: 'Engineering' },
+  { id: 'emp3', name: 'Nina Patel', role: 'Account Manager', department: 'Sales' },
+  { id: 'emp4', name: 'Chris Wong', role: 'Product Specialist', department: 'Product' },
+  { id: 'emp5', name: 'Maria Santos', role: 'Billing Specialist', department: 'Finance' },
+  { id: 'emp6', name: 'Jake Morrison', role: 'Senior Engineer', department: 'Engineering' },
+];

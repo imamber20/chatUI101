@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Search, PhoneIncoming, Play, Download, Filter, X, Calendar as CalendarIcon, ChevronDown } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Calendar } from './ui/calendar';
-import { contacts, callLogs as initialCallLogs } from '../data/mockData';
+import { contacts, callLogs as initialCallLogs, DUMMY_AUDIO_URL } from '../data/mockData';
 
 const FILTER_OPTIONS = [
   { id: 'all', label: 'All Time' },
@@ -262,8 +262,18 @@ export default function ChatList({ selectedChat, selectedCallLogId, onSelectChat
                   <Play size={12} fill="currentColor" />
                 </button>
                 <button
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const link = document.createElement('a');
+                    link.href = DUMMY_AUDIO_URL;
+                    link.download = `call-recording-${contact.name.replace(/\s+/g, '-').toLowerCase()}-${log.id}.mp3`;
+                    link.target = '_blank';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                  }}
                   className="text-gray-400 hover:text-emerald-600 transition-colors"
+                  title="Download recording"
                 >
                   <Download size={16} />
                 </button>
