@@ -12,7 +12,7 @@ import {
 const navItems = [
 { id: 'chats', icon: MessageCircle, label: "AI Centre", badge: 10 },
 { id: 'work', icon: Briefcase, label: "Employees" },
-{ id: 'meet', icon: Video, label: 'Meet' },
+{ id: 'meet', icon: Video, label: "Dashboard" },
 { id: 'calendar', icon: Calendar, label: 'Calendar' },
 { id: 'rating', icon: Star, label: 'Rating' },
 { id: 'saved', icon: Bookmark, label: 'Saved' }];
