@@ -23,7 +23,7 @@ export default function Sidebar({ activeNav, onNavChange }) {
     <div className="w-[72px] min-w-[72px] h-full flex flex-col items-center py-5 bg-gradient-to-b from-emerald-950 to-green-900">
       {/* Logo */}
       <div className="mb-6">
-        <span className="text-white font-bold text-xl tracking-wide">CH</span>
+        <span className="!font-bold !text-base text-white">HeyKiki</span>
       </div>
 
       {/* Nav Items */}
