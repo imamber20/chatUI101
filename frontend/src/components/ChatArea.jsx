@@ -99,90 +99,90 @@ function AudioPlayer({ audioUrl }) {
   const progressBarIdx = Math.floor((progress / 100) * waveformData.length);
 
   return (
-    <div className="border-t-2 border-emerald-400 bg-gradient-to-b from-green-50 to-emerald-50">
+    <div className="mx-4 mb-3 rounded-2xl border border-green-200 bg-gradient-to-b from-green-50 to-emerald-50 overflow-hidden shadow-sm">
       <audio ref={audioRef} preload="metadata" />
 
       {/* Waveform */}
       <div
-        className="px-6 pt-4 pb-1 cursor-pointer"
+        className="px-5 pt-3 pb-1 cursor-pointer"
         onClick={seekToPosition}
       >
-        <div className="flex items-end justify-center gap-[2px] h-12">
+        <div className="flex items-end justify-center gap-[2px] h-10">
           {waveformData.map((h, i) => (
             <div
               key={i}
-              className={`w-[3px] rounded-full transition-colors duration-75 ${
+              className={`w-[2.5px] rounded-full transition-colors duration-75 ${
                 i <= progressBarIdx ? 'bg-emerald-500' : 'bg-green-200'
               }`}
-              style={{ height: `${h}px` }}
+              style={{ height: `${Math.round(h * 0.8)}px` }}
             />
           ))}
         </div>
       </div>
 
       {/* Time display */}
-      <div className="flex justify-between px-6 pb-2">
-        <span className={`text-xs font-mono tabular-nums ${isPlaying ? 'text-emerald-600' : 'text-gray-500'}`}>
+      <div className="flex justify-between px-5 pb-1">
+        <span className={`text-[11px] font-mono tabular-nums ${isPlaying ? 'text-emerald-600' : 'text-gray-500'}`}>
           {formatTime(currentTime)}
         </span>
-        <span className="text-xs font-mono tabular-nums text-gray-400">
+        <span className="text-[11px] font-mono tabular-nums text-gray-400">
           {formatTime(duration)}
         </span>
       </div>
 
       {/* Controls */}
-      <div className="flex items-center justify-center gap-5 pb-4 px-6">
+      <div className="flex items-center justify-center gap-4 pb-3 px-5">
         {/* Speed */}
         <button
           onClick={cycleSpeed}
-          className="w-9 h-9 flex items-center justify-center text-gray-500 hover:text-emerald-700 transition-colors"
+          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-emerald-700 transition-colors"
           title={`Speed: ${playbackRate}x`}
         >
-          <span className="text-[11px] font-bold">{playbackRate}x</span>
+          <span className="text-[10px] font-bold">{playbackRate}x</span>
         </button>
 
         {/* Rewind 10s */}
         <button
           onClick={() => skip(-10)}
-          className="w-9 h-9 flex items-center justify-center text-gray-500 hover:text-emerald-700 transition-colors relative"
+          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-emerald-700 transition-colors relative"
           title="Rewind 10s"
         >
-          <SkipBack size={20} />
-          <span className="absolute -bottom-0.5 text-[8px] font-bold text-gray-400">10</span>
+          <SkipBack size={18} />
+          <span className="absolute -bottom-0.5 text-[7px] font-bold text-gray-400">10</span>
         </button>
 
         {/* Play / Pause */}
         <button
           onClick={togglePlay}
-          className="w-14 h-14 rounded-full bg-emerald-800 text-white flex items-center justify-center hover:bg-emerald-900 transition-colors shadow-lg shadow-emerald-800/30"
+          className="w-12 h-12 rounded-full bg-emerald-800 text-white flex items-center justify-center hover:bg-emerald-900 transition-colors shadow-lg shadow-emerald-800/30"
         >
-          {isPlaying ? <Pause size={24} fill="white" /> : <Play size={24} fill="white" className="ml-1" />}
+          {isPlaying ? <Pause size={20} fill="white" /> : <Play size={20} fill="white" className="ml-0.5" />}
         </button>
 
         {/* Forward 10s */}
         <button
           onClick={() => skip(10)}
-          className="w-9 h-9 flex items-center justify-center text-gray-500 hover:text-emerald-700 transition-colors relative"
+          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-emerald-700 transition-colors relative"
           title="Forward 10s"
         >
-          <SkipForward size={20} />
-          <span className="absolute -bottom-0.5 text-[8px] font-bold text-gray-400">10</span>
+          <SkipForward size={18} />
+          <span className="absolute -bottom-0.5 text-[7px] font-bold text-gray-400">10</span>
         </button>
 
         {/* Favorite */}
         <button
           onClick={() => setIsFavorited(!isFavorited)}
-          className={`w-9 h-9 flex items-center justify-center transition-colors ${
+          className={`w-8 h-8 flex items-center justify-center transition-colors ${
             isFavorited ? 'text-red-500' : 'text-gray-400 hover:text-red-400'
           }`}
           title="Favorite"
         >
-          <Heart size={20} fill={isFavorited ? 'currentColor' : 'none'} />
+          <Heart size={18} fill={isFavorited ? 'currentColor' : 'none'} />
         </button>
       </div>
 
       {/* Bottom accent */}
-      <div className="h-1 bg-gradient-to-r from-emerald-400 via-green-500 to-teal-400" />
+      <div className="h-0.5 bg-gradient-to-r from-emerald-400 via-green-500 to-teal-400" />
     </div>
   );
 }

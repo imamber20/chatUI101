@@ -285,8 +285,9 @@ function CreateTicketTab({ selectedChat, selectedCallLogId }) {
 
   const defaultDescription = useMemo(() => {
     if (!transcript) return '';
-    return transcript.messages.map((m) => `${m.sender === 'kiki' ? 'Kiki' : contact?.name}: ${m.text}`).join('\n');
-  }, [transcript, contact]);
+    const summary = chatSummaries[selectedChat];
+    return summary?.summary || '';
+  }, [transcript, selectedChat]);
 
   const [isEditing, setIsEditing] = useState(false);
   const [ticketData, setTicketData] = useState({
