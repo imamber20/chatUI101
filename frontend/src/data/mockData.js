@@ -343,3 +343,51 @@ export const chatStats = {
     firstMessage: 'Nov 20, 2024',
   },
 };
+
+
+// Helper to create dates relative to now
+function daysAgo(days, hours = 10, minutes = 30) {
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  d.setHours(hours, minutes, 0, 0);
+  return d.toISOString();
+}
+
+export const callLogs = [
+  // Today (within 1 day)
+  { id: 'cl1', contactId: 'sarah', date: daysAgo(0, 9, 15), duration: '26:56', isRead: false },
+  { id: 'cl2', contactId: 'james', date: daysAgo(0, 8, 42), duration: '12:51', isRead: false },
+  { id: 'cl3', contactId: 'elena', date: daysAgo(0, 7, 30), duration: '14:26', isRead: true },
+
+  // Yesterday (within 1 day boundary)
+  { id: 'cl4', contactId: 'michael', date: daysAgo(1, 16, 20), duration: '23:52', isRead: false },
+  { id: 'cl5', contactId: 'priya', date: daysAgo(1, 14, 5), duration: '01:45', isRead: true },
+  { id: 'cl6', contactId: 'jenny', date: daysAgo(1, 11, 15), duration: '20:42', isRead: false },
+
+  // 2-3 days ago (within 7 days)
+  { id: 'cl7', contactId: 'david', date: daysAgo(2, 15, 0), duration: '25:27', isRead: true },
+  { id: 'cl8', contactId: 'alex', date: daysAgo(2, 10, 30), duration: '00:12', isRead: true },
+  { id: 'cl9', contactId: 'sarah', date: daysAgo(3, 13, 45), duration: '04:56', isRead: false },
+  { id: 'cl10', contactId: 'james', date: daysAgo(3, 9, 0), duration: '11:16', isRead: true },
+
+  // 4-6 days ago (within 7 days)
+  { id: 'cl11', contactId: 'elena', date: daysAgo(4, 17, 30), duration: '28:25', isRead: true },
+  { id: 'cl12', contactId: 'michael', date: daysAgo(5, 12, 15), duration: '08:33', isRead: false },
+  { id: 'cl13', contactId: 'priya', date: daysAgo(5, 8, 45), duration: '15:20', isRead: true },
+  { id: 'cl14', contactId: 'jenny', date: daysAgo(6, 16, 0), duration: '32:10', isRead: true },
+
+  // 7-14 days ago (within 1 month)
+  { id: 'cl15', contactId: 'david', date: daysAgo(8, 11, 0), duration: '06:45', isRead: true },
+  { id: 'cl16', contactId: 'alex', date: daysAgo(9, 14, 30), duration: '19:22', isRead: false },
+  { id: 'cl17', contactId: 'sarah', date: daysAgo(10, 10, 0), duration: '42:18', isRead: true },
+  { id: 'cl18', contactId: 'james', date: daysAgo(12, 9, 15), duration: '03:55', isRead: true },
+
+  // 15-30 days ago (within 1 month)
+  { id: 'cl19', contactId: 'elena', date: daysAgo(15, 13, 0), duration: '17:40', isRead: true },
+  { id: 'cl20', contactId: 'michael', date: daysAgo(18, 15, 45), duration: '09:12', isRead: true },
+  { id: 'cl21', contactId: 'priya', date: daysAgo(20, 10, 30), duration: '22:05', isRead: false },
+  { id: 'cl22', contactId: 'jenny', date: daysAgo(22, 8, 0), duration: '05:38', isRead: true },
+  { id: 'cl23', contactId: 'david', date: daysAgo(25, 16, 15), duration: '31:44', isRead: true },
+  { id: 'cl24', contactId: 'alex', date: daysAgo(28, 11, 45), duration: '13:27', isRead: true },
+  { id: 'cl25', contactId: 'sarah', date: daysAgo(30, 9, 0), duration: '07:55', isRead: true },
+];

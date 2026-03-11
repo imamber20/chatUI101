@@ -4,7 +4,7 @@ import Sidebar from "./components/Sidebar";
 import ChatList from "./components/ChatList";
 import ChatArea from "./components/ChatArea";
 import ChatDetails from "./components/ChatDetails";
-import { contacts } from "./data/mockData";
+// contacts imported inside ChatList
 
 function App() {
   const [activeNav, setActiveNav] = useState("chats");
@@ -20,7 +20,6 @@ function App() {
 
         {/* Chat List */}
         <ChatList
-          contacts={contacts}
           selectedChat={selectedChat}
           onSelectChat={setSelectedChat}
           searchQuery={searchQuery}
