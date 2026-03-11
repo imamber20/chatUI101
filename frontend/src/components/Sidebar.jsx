@@ -15,7 +15,7 @@ const navItems = [
 { id: 'meet', icon: Video, label: "Dashboard" },
 { id: 'calendar', icon: Calendar, label: 'Calendar' },
 { id: 'rating', icon: Star, label: "Analysis" },
-{ id: 'saved', icon: Bookmark, label: 'Saved' }];
+{ id: 'saved', icon: Bookmark, label: "Subscription" }];
 
 
 export default function Sidebar({ activeNav, onNavChange }) {
